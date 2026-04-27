@@ -10,6 +10,7 @@
 [![Next.js ready](https://img.shields.io/badge/Next.js-ready-000000.svg?logo=next.js)](https://nextjs.org)
 [![GitLab](https://img.shields.io/badge/GitLab-CI-FC6D26.svg?logo=gitlab)](https://docs.gitlab.com/ci/)
 [![GitHub Actions](https://img.shields.io/badge/GitHub-Actions-2088FF.svg?logo=github-actions&logoColor=white)](https://docs.github.com/en/actions)
+[![Docker](https://img.shields.io/badge/Docker-compatible-2496ED.svg?logo=docker&logoColor=white)](https://www.docker.com)
 [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 
 ![Rebuilder admin panel](docs/screenshots/admin-panel.png)
