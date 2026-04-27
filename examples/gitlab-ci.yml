@@ -1,0 +1,33 @@
+# Example GitLab CI pipeline for strapi-plugin-rebuilder
+#
+# This example shows ONLY the plugin-specific bits. Add your own build /
+# deploy / restart stages around it.
+#
+# When the plugin triggers a pipeline, it sends two CI variables:
+#   - BUILD_MESSAGE  the label the editor typed in the Strapi UI
+#   - TRIGGERED_BY   the Strapi admin who clicked Rebuild
+
+workflow:
+  # Show the editor's BUILD_MESSAGE as the pipeline name in the GitLab UI
+  # (and in the Rebuilder admin panel). Falls back to the commit title.
+  name: "$PIPELINE_NAME"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "trigger" && $BUILD_MESSAGE'
+      variables:
+        PIPELINE_NAME: "$BUILD_MESSAGE"
+    - when: always
+      variables:
+        PIPELINE_NAME: "$CI_COMMIT_TITLE"
+
+stages:
+  - build
+
+build:
+  stage: build
+  rules:
+    # Run on pushes to main AND on Strapi-triggered pipelines
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_PIPELINE_SOURCE == "trigger"'
+  script:
+    - echo "Triggered by ${TRIGGERED_BY:-CI}"
+    - echo "Build message ${BUILD_MESSAGE:-<none>}"
+    # Your real build / deploy steps go here

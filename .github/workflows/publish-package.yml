@@ -1,0 +1,39 @@
+name: Publish to npm
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+  id-token: write  # Required for npm Trusted Publishing (OIDC)
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      # Trusted Publishing requires npm >= 11.5.1.
+      # Node 20 ships with an older npm, so upgrade to latest.
+      - name: Upgrade npm
+        run: npm install -g npm@latest
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Verify package contents
+        run: npm run pack:dry
+
+      - name: Publish to npm with provenance
+        run: npm publish --provenance --access public

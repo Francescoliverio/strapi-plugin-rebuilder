@@ -1,0 +1,108 @@
+{
+  "name": "@francescoliverio/strapi-plugin-rebuilder",
+  "version": "0.1.11",
+  "description": "Trigger and monitor external rebuild pipelines from the Strapi admin panel.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Francescoliverio/strapi-plugin-rebuilder.git"
+  },
+  "homepage": "https://github.com/Francescoliverio/strapi-plugin-rebuilder#readme",
+  "bugs": {
+    "url": "https://github.com/Francescoliverio/strapi-plugin-rebuilder/issues"
+  },
+  "strapi": {
+    "name": "nexjs-rebuilder",
+    "description": "Trigger and monitor external rebuild pipelines from Strapi.",
+    "kind": "plugin"
+  },
+  "main": "./strapi-server.js",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "admin",
+    "dist",
+    "server",
+    "strapi-admin.js",
+    "strapi-server.js",
+    "tsconfig.json"
+  ],
+  "exports": {
+    ".": "./strapi-server.js",
+    "./strapi-admin": "./strapi-admin.js",
+    "./strapi-server": "./strapi-server.js",
+    "./package.json": "./package.json"
+  },
+  "keywords": [
+    "strapi",
+    "strapi-plugin",
+    "strapi-v4",
+    "strapi-v5",
+    "nextjs",
+    "next",
+    "ssr",
+    "ssg",
+    "isr",
+    "rebuild",
+    "deploy",
+    "ci",
+    "cd",
+    "gitlab",
+    "gitlab-ci",
+    "github",
+    "github-actions",
+    "webhook",
+    "pipeline",
+    "continuous-deployment",
+    "headless-cms"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^4.24.10",
+    "axios": "^1.13.1",
+    "github-markdown-css": "^5.9.0"
+  },
+  "peerDependencies": {
+    "@strapi/icons": "^1.0.0 || ^2.0.0",
+    "@strapi/strapi": "^4.6.2 || ^5.0.0",
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
+  },
+  "devDependencies": {
+    "@strapi/strapi": "^5.43.0",
+    "@strapi/typescript-utils": "^5.43.0",
+    "@types/node": "^22.15.3",
+    "typescript": "^5.4.4"
+  },
+  "author": {
+    "name": "Francesco Oliverio",
+    "email": "github@francescoliverio.com",
+    "url": "https://github.com/Francescoliverio"
+  },
+  "maintainers": [
+    {
+      "name": "Francesco Oliverio",
+      "email": "github@francescoliverio.com"
+    }
+  ],
+  "contributors": [
+    {
+      "name": "Alex Zaganelli",
+      "url": "https://github.com/alexzaganelli"
+    }
+  ],
+  "engines": {
+    "node": ">=14.19.1",
+    "npm": ">=6.0.0"
+  },
+  "scripts": {
+    "develop": "tsc -w",
+    "build": "tsc",
+    "prepare": "npm run build",
+    "prepack": "npm run build",
+    "pack:dry": "npm pack --dry-run",
+    "test:compat": "node scripts/compat-smoke.js"
+  },
+  "license": "MIT"
+}

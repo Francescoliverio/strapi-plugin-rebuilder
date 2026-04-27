@@ -1,0 +1,6 @@
+.home/
+.strapi/
+.tmp/
+dist/
+node_modules/
+.env

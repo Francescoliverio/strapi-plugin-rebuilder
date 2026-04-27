@@ -1,0 +1,45 @@
+# Example GitHub Actions workflow for strapi-plugin-rebuilder
+#
+# This example shows ONLY the plugin-specific bits. Add your own build /
+# deploy / restart steps inside the job.
+#
+# When the plugin dispatches this workflow, it sends two inputs:
+#   - build_message  the label the editor typed in the Strapi UI
+#   - triggered_by   the Strapi admin who clicked Rebuild
+#
+# Strapi env required to point at this file:
+#   NEXJS_REBUILDER_PROVIDER=github
+#   NEXJS_REBUILDER_GITHUB_WORKFLOW_ID=deploy.yml
+
+name: Deploy
+
+# Show the editor's build_message as the run name in the GitHub Actions UI
+# (and in the Rebuilder admin panel). Falls back to the commit message.
+run-name: ${{ inputs.build_message || github.event.head_commit.message || github.workflow }}
+
+on:
+  workflow_dispatch:
+    # The plugin requires these two inputs to be declared, otherwise GitHub
+    # will reject the dispatch request.
+    inputs:
+      build_message:
+        description: "Label from the Strapi Rebuilder UI"
+        required: false
+        type: string
+      triggered_by:
+        description: "Strapi admin who clicked Rebuild"
+        required: false
+        type: string
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print trigger metadata
+        run: |
+          echo "build_message = ${{ inputs.build_message }}"
+          echo "triggered_by  = ${{ inputs.triggered_by }}"
+
+      # Your real build / deploy steps go here

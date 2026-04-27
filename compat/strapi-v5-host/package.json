@@ -1,0 +1,23 @@
+{
+  "name": "nexjs-rebuilder-strapi-v5-smoke",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Minimal Strapi 5 host used to smoke test the nexjs-rebuilder plugin.",
+  "scripts": {
+    "build": "strapi build",
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "console": "strapi console"
+  },
+  "dependencies": {
+    "@strapi/strapi": "^5.0.0",
+    "better-sqlite3": "^11.8.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.0.0",
+    "styled-components": "^6.0.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
