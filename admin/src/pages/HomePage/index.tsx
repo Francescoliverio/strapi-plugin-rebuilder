@@ -648,7 +648,7 @@ const HomePage: React.VoidFunctionComponent = () => {
       );
       setReadmeHtml(data?.html || "");
     } catch (err: any) {
-      setReadmeError(err?.response?.data?.error || err?.message || "Failed to load README.");
+      setReadmeError(err?.response?.data?.error?.message || err?.message || "Failed to load README.");
     } finally {
       setReadmeLoading(false);
     }
@@ -715,7 +715,7 @@ const HomePage: React.VoidFunctionComponent = () => {
       });
       setBuildMessage(generateBuildMessage(settings.buildMessageTemplate, settings.timezone));
     } catch (err: any) {
-      setError(err?.response?.data?.error || "Failed to trigger pipeline.");
+      setError(err?.response?.data?.error?.message || "Failed to trigger pipeline.");
       setPendingTrigger(null);
     }
   };
@@ -731,7 +731,7 @@ const HomePage: React.VoidFunctionComponent = () => {
       setBuildMessage(generateBuildMessage(saved.buildMessageTemplate, saved.timezone));
       setSettingsMessage("Settings saved.");
     } catch (err: any) {
-      setSettingsMessage(err?.response?.data?.error || "Failed to save settings.");
+      setSettingsMessage(err?.response?.data?.error?.message || "Failed to save settings.");
     } finally {
       setSettingsSaving(false);
     }
@@ -753,7 +753,7 @@ const HomePage: React.VoidFunctionComponent = () => {
 
   React.useEffect(() => {
     if (queryError) {
-      setError((queryError as any)?.response?.data?.error || "Failed to fetch pipeline status.");
+      setError((queryError as any)?.response?.data?.error?.message || "Failed to fetch pipeline status.");
     }
   }, [queryError]);
 
@@ -865,8 +865,12 @@ const HomePage: React.VoidFunctionComponent = () => {
             <Typography variant="pi" textColor="neutral600" fontWeight="bold">
               CURRENT STATUS
             </Typography>
-            {isLoading || isNil(data) ? (
+            {isLoading && !queryError ? (
               <Loader small>Loading...</Loader>
+            ) : queryError && isNil(data) ? (
+              <Typography variant="beta" textColor="danger600" style={{ fontWeight: 700 }}>
+                Unavailable
+              </Typography>
             ) : (
               <Flex gap={2} alignItems="center">
                 <StatusIcon status={status} size={24} />
