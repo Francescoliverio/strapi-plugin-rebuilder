@@ -741,7 +741,7 @@ const HomePage: React.VoidFunctionComponent = () => {
     setSettingsDraft(DEFAULT_SETTINGS);
   };
 
-  const { isLoading, data } = useQuery({
+  const { isLoading, data, error: queryError } = useQuery({
     queryKey: ["pipeline"],
     queryFn: async () => {
       const { data } = await axiosInstance.get("/nexjs-rebuilder/pipeline-status");
@@ -749,10 +749,13 @@ const HomePage: React.VoidFunctionComponent = () => {
     },
     enabled: true,
     refetchInterval: Math.max(1, settings.pollingIntervalSeconds) * 1000,
-    onError: (err: any) => {
-      setError(err?.response?.data?.error || "Failed to fetch pipeline status.");
-    },
   });
+
+  React.useEffect(() => {
+    if (queryError) {
+      setError((queryError as any)?.response?.data?.error || "Failed to fetch pipeline status.");
+    }
+  }, [queryError]);
 
   const status: BuildStatus = data?.status || "unknown";
   const hasData = !isLoading && !isNil(data) && status && status !== "unknown";
