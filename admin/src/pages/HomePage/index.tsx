@@ -6,8 +6,7 @@
 
 import { isNil, upperFirst } from "lodash";
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import styled, { useTheme } from "styled-components";
+import styled, { keyframes, useTheme } from "styled-components";
 
 import {
   Badge,
@@ -456,12 +455,17 @@ const StagesGraph: React.FC<{ pipeline: Pipeline }> = ({ pipeline }) => {
   );
 };
 
+const pulse = keyframes`
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+`;
+
 const SkeletonBar = styled.div<{ width: string; height?: number }>`
   width: ${({ width }) => width};
   height: ${({ height = 12 }) => `${height}px`};
   border-radius: 4px;
   background: ${({ theme }) => theme.colors.neutral150};
-  animation: pulse 1.4s ease-in-out infinite;
+  animation: ${pulse} 1.4s ease-in-out infinite;
 `;
 
 const SkeletonDot = styled.div`
@@ -469,7 +473,7 @@ const SkeletonDot = styled.div`
   height: 18px;
   border-radius: 50%;
   background: ${({ theme }) => theme.colors.neutral150};
-  animation: pulse 1.4s ease-in-out infinite;
+  animation: ${pulse} 1.4s ease-in-out infinite;
 `;
 
 const PendingPipelineRow: React.FC<{ message: string; provider: "gitlab" | "github" }> = ({
@@ -599,6 +603,40 @@ const PipelineRow: React.FC<{ pipeline: Pipeline }> = ({ pipeline }) => {
       </Flex>
     </Box>
   );
+};
+
+const usePipelinePolling = (intervalSeconds: number) => {
+  const [data, setData] = React.useState<any>(null);
+  const [error, setError] = React.useState<any>(null);
+  const [isLoading, setIsLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    const fetchData = async () => {
+      try {
+        const res = await axiosInstance.get("/nexjs-rebuilder/pipeline-status");
+        if (!cancelled) {
+          setData(res.data);
+          setError(null);
+          setIsLoading(false);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err);
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchData();
+    const id = setInterval(fetchData, Math.max(1, intervalSeconds) * 1000);
+    return () => {
+      cancelled = true;
+      clearInterval(id);
+    };
+  }, [intervalSeconds]);
+
+  return { data, error, isLoading };
 };
 
 const HomePage: React.VoidFunctionComponent = () => {
@@ -741,15 +779,9 @@ const HomePage: React.VoidFunctionComponent = () => {
     setSettingsDraft(DEFAULT_SETTINGS);
   };
 
-  const { isLoading, data, error: queryError } = useQuery({
-    queryKey: ["pipeline"],
-    queryFn: async () => {
-      const { data } = await axiosInstance.get("/nexjs-rebuilder/pipeline-status");
-      return data;
-    },
-    enabled: true,
-    refetchInterval: Math.max(1, settings.pollingIntervalSeconds) * 1000,
-  });
+  const { isLoading, data, error: queryError } = usePipelinePolling(
+    settings.pollingIntervalSeconds
+  );
 
   React.useEffect(() => {
     if (queryError) {
@@ -807,13 +839,6 @@ const HomePage: React.VoidFunctionComponent = () => {
 
   return (
     <Box background="neutral100">
-      <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
-        }
-      `}</style>
-
       <Box paddingTop={10} paddingLeft={10} paddingRight={10} paddingBottom={6}>
         <Flex justifyContent="space-between" alignItems="center">
           <Typography variant="alpha" tag="h1">
