@@ -10,7 +10,7 @@
     "console": "strapi console"
   },
   "dependencies": {
-    "@strapi/strapi": "^5.0.0",
+    "@strapi/strapi": "^5.44.0",
     "better-sqlite3": "^11.8.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
