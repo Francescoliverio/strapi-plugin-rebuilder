@@ -1,6 +1,6 @@
 {
   "name": "@francescoliverio/strapi-plugin-rebuilder",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "Trigger and monitor external rebuild pipelines from the Strapi admin panel.",
   "repository": {
     "type": "git",
