@@ -102,7 +102,8 @@
     "prepare": "npm run build",
     "prepack": "npm run build",
     "pack:dry": "npm pack --dry-run",
-    "test:compat": "node scripts/compat-smoke.js"
+    "test:compat": "node scripts/compat-smoke.js",
+    "release": "node scripts/release.js"
   },
   "license": "MIT"
 }
