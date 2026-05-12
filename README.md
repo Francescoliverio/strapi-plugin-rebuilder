@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/logo/strapi-rebuilder-icon.svg" alt="Strapi Rebuilder Logo" width="180" />
+</p>
+
 # Strapi Plugin Rebuilder
 
 > Rebuild your **Next.js SSR / SSG / ISR** site from the Strapi admin panel — one click, live status, full history. Works with **GitLab CI** and **GitHub Actions**.
